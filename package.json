@@ -1,0 +1,12 @@
+{
+  "name": "build",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node gdax.js"
+  },
+  "dependencies": {
+    "command-line-args": "^4.0.7",
+    "gdax": "^0.4.2",
+    "rxjs": "^5.4.3"
+  }
+}
