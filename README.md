@@ -9,6 +9,11 @@ node gdax.js -k YOUR_API_KEY -s YOUR_API_SECRET -p YOUR_PASSPHRASE
 
 # Output 
 
-For each currency : `CURRENCY BALANCE LAST_TRADE_VALUE = VALUE_IN_EUR`
-
-At the end `Total: VALUE_IN_EUR`
+```
+CURRENCY TRADEVALUE BALANCE TOTAL
+LTC      6          5       30
+EUR      1          2       2
+ETH      10         8       80
+BTC      9          7       63
+Total: 175 EUR
+```
