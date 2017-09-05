@@ -6,7 +6,8 @@ const columnify = require('columnify')
 const optionDefinitions = [
   { name: 'apiKey', alias: 'k', type: String },
   { name: 'secret', alias: 's', type: String},
-  { name: 'passphrase', alias: 'p', type: String }
+  { name: 'passphrase', alias: 'p', type: String },
+  { name: 'invested', alias: 'i', type: Number }
 ]
 
 const options = commandLineArgs(optionDefinitions)
@@ -38,7 +39,18 @@ Observable.zip(getLastTradeValues(), getAccounts(authedClient))
 .flatMap( a => Observable.from(a))
 .map( a => a.total)
 .reduce((x, y) => x + y, 0)
-.subscribe( total => console.log("Total: " + total + " EUR"), err => console.log(err) )
+.subscribe(
+  t => {
+    var g = t - options.invested
+    var result = {
+    "Total": t.toFixed(2) + " EUR",
+    "Invested": options.invested.toFixed(2) + " EUR",
+    "Gain": g.toFixed(2) + " EUR (" + (g * 100 / t).toFixed(2) + "%)"
+    }
+    console.log('\n')
+    console.log(columnify(result, {showHeaders: false}))
+  },
+  err => console.log(err))
 
 function getAccounts(client){
   return Observable.create( obs => {
