@@ -5,6 +5,7 @@
     "start": "node gdax.js"
   },
   "dependencies": {
+    "columnify": "^1.5.4",
     "command-line-args": "^4.0.7",
     "gdax": "^0.4.2",
     "rxjs": "^5.4.3"

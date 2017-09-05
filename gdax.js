@@ -1,6 +1,7 @@
 const Gdax = require('gdax');
 const Observable = require('rxjs').Observable;
 const commandLineArgs = require('command-line-args')
+const columnify = require('columnify')
 
 const optionDefinitions = [
   { name: 'apiKey', alias: 'k', type: String },
@@ -21,14 +22,22 @@ Observable.zip(getLastTradeValues(), getAccounts(authedClient))
   var accounts = t[1]
 
   return accounts.map(a => {
-
-    let tradeValue = a.currency == 'EUR' ? 1 : Number.parseFloat(tradeValues.get(a.currency))
-    let balance = Number.parseFloat(a.balance) 
-    let total = balance * tradeValue
-    console.log(a.currency + " " + balance + " " + tradeValue + " = " + total)
-    return total
-  }).reduce((x, y) => x + y, 0)
+    var b = Number.parseFloat(a.balance)
+    var t = a.currency == 'EUR' ? 1 : Number.parseFloat(tradeValues.get(a.currency))
+    return { 
+      currency: a.currency,
+      tradeValue: t,
+      balance: b,
+      total: b * t
+    }
+  })
 })
+.do( a => {
+  console.log( columnify(a))
+})
+.flatMap( a => Observable.from(a))
+.map( a => a.total)
+.reduce((x, y) => x + y, 0)
 .subscribe( total => console.log("Total: " + total + " EUR"), err => console.log(err) )
 
 function getAccounts(client){
